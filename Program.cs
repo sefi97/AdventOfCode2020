@@ -9,7 +9,8 @@ namespace AdventOfCode
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(ReadInput().Solve());
+            Console.WriteLine(ReadInput().SolveFirstPart());
+            Console.WriteLine(ReadInput().SolveSecondPart());
         }
 
         private static List<int> ReadInput()
@@ -22,7 +23,7 @@ namespace AdventOfCode
             return lines;
         }
 
-        private static int Solve(this List<int> input)
+        private static int SolveFirstPart(this List<int> input)
         {
             HashSet<int> visitedComplements = new HashSet<int>();
 
@@ -34,6 +35,27 @@ namespace AdventOfCode
 
                 if (visitedComplements.Contains(candidateComplement))
                     return candidate * candidateComplement;
+            }
+
+            return 0;
+        }
+
+        
+        private static int SolveSecondPart(this List<int> input)
+        {
+            foreach(int firstCandidate in input)
+            {
+                HashSet<int> visitedComplements = new HashSet<int>();
+
+                foreach(int secondCandidate in input)
+                {
+                    visitedComplements.Add(secondCandidate);
+
+                    int candidatesComplement = 2020 - firstCandidate - secondCandidate;
+
+                    if (visitedComplements.Contains(candidatesComplement))
+                        return firstCandidate * secondCandidate * candidatesComplement;
+                }
             }
 
             return 0;
