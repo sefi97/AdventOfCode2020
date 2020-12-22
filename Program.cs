@@ -12,6 +12,7 @@ namespace AdventOfCode
             Console.WriteLine(ReadInput("Inputs/InputDay1.txt").SolveDay1FirstPart());
             Console.WriteLine(ReadInput("Inputs/InputDay1.txt").SolveDay1SecondPart());
             Console.WriteLine(ReadInput("Inputs/InputDay2.txt").SolveDay2FirstPart());
+            Console.WriteLine(ReadInput("Inputs/InputDay2.txt").SolveDay2SecondPart());
         }
 
         private static List<string> ReadInput(string fileName)
@@ -82,13 +83,51 @@ namespace AdventOfCode
                 });
             });
 
-            int validPasswords = 0 ;
+            int validPasswords = 0;
 
             foreach(Password password in passwords)
             {
                 int requiredLetterCount = password.Value.Count( x => x == password.RequiredLetter );
 
-                if ( requiredLetterCount >= password.RequiredMin && requiredLetterCount <= password.RequiredMax)
+                if (requiredLetterCount >= password.RequiredMin && requiredLetterCount <= password.RequiredMax)
+                    validPasswords++;
+            }
+
+            return validPasswords;
+        }
+
+        private class NewPassword {
+            public int FirstPosition {get; set;}
+            public int SecondPosition {get; set;}
+            public char RequiredLetter {get; set;}
+            public string Value {get; set;}
+        }
+
+        private static int SolveDay2SecondPart(this List<string> input)
+        {
+            List<NewPassword> passwords = new List<NewPassword>();
+
+            input.ForEach(inputLine => {
+                passwords.Add(new NewPassword {
+                    FirstPosition = Int32.Parse(inputLine.Substring(0, inputLine.IndexOf('-'))) - 1,
+                    SecondPosition = Int32.Parse(inputLine.Substring(inputLine.IndexOf('-') + 1, inputLine.IndexOf(' ') - inputLine.IndexOf('-') - 1)) - 1,
+                    RequiredLetter = char.Parse(inputLine.Substring(inputLine.IndexOf(' ') + 1, inputLine.IndexOf(':') - inputLine.IndexOf(' ') - 1)),
+                    Value = inputLine.Substring(inputLine.IndexOf(':') + 2)
+                });
+            });
+
+            int validPasswords = 0;
+
+            foreach(NewPassword password in passwords)
+            {
+                if (password.FirstPosition < 0 || password.FirstPosition >= password.Value.Length ||
+                    password.SecondPosition < 0 || password.SecondPosition >= password.Value.Length)
+                    continue;
+
+                bool firstRequired = password.Value.ElementAt(password.FirstPosition) == password.RequiredLetter;
+                bool secondRequired = password.Value.ElementAt(password.SecondPosition) == password.RequiredLetter;
+
+                if (firstRequired ^ secondRequired)
                     validPasswords++;
             }
 
