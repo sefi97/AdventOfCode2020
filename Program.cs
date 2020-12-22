@@ -13,21 +13,21 @@ namespace AdventOfCode
             Console.WriteLine(ReadInput("Inputs/InputDay1.txt").SolveDay1SecondPart());
         }
 
-        private static List<int> ReadInput(string fileName)
+        private static List<string> ReadInput(string fileName)
         {
-            List<int> lines = new List<int>();
+            List<string> lines = new List<string>();
 
             foreach(string line in File.ReadAllLines(fileName))
-                lines.Add(Int32.Parse(line));
+                lines.Add(line);
 
             return lines;
         }
 
-        private static int SolveDay1FirstPart(this List<int> input)
+        private static int SolveDay1FirstPart(this List<string> input)
         {
             HashSet<int> visitedComplements = new HashSet<int>();
 
-            foreach(int candidate in input)
+            foreach(int candidate in input.ConvertAll( i => Int32.Parse(i)))
             {
                 visitedComplements.Add(candidate);
 
@@ -41,13 +41,13 @@ namespace AdventOfCode
         }
 
         
-        private static int SolveDay1SecondPart(this List<int> input)
+        private static int SolveDay1SecondPart(this List<string> input)
         {
-            foreach(int firstCandidate in input)
+            foreach(int firstCandidate in input.ConvertAll(i => Int32.Parse(i)))
             {
                 HashSet<int> visitedComplements = new HashSet<int>();
 
-                foreach(int secondCandidate in input)
+                foreach(int secondCandidate in input.ConvertAll(i => Int32.Parse(i)))
                 {
                     visitedComplements.Add(secondCandidate);
 
