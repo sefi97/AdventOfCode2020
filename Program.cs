@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using AdventOfCode.Helpers;
 
 namespace AdventOfCode
 {
@@ -9,20 +10,12 @@ namespace AdventOfCode
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(ReadInput("Inputs/InputDay1.txt").SolveDay1FirstPart());
-            Console.WriteLine(ReadInput("Inputs/InputDay1.txt").SolveDay1SecondPart());
-            Console.WriteLine(ReadInput("Inputs/InputDay2.txt").SolveDay2FirstPart());
-            Console.WriteLine(ReadInput("Inputs/InputDay2.txt").SolveDay2SecondPart());
-        }
+            InputReader inputReader = new InputReader();
 
-        private static List<string> ReadInput(string fileName)
-        {
-            List<string> lines = new List<string>();
-
-            foreach(string line in File.ReadAllLines(fileName))
-                lines.Add(line);
-
-            return lines;
+            Console.WriteLine(inputReader.Read("Inputs/InputDay1.txt").SolveDay1FirstPart());
+            Console.WriteLine(inputReader.Read("Inputs/InputDay1.txt").SolveDay1SecondPart());
+            Console.WriteLine(inputReader.Read("Inputs/InputDay2.txt").SolveDay2FirstPart());
+            Console.WriteLine(inputReader.Read("Inputs/InputDay2.txt").SolveDay2SecondPart());
         }
 
         private static int SolveDay1FirstPart(this List<string> input)
