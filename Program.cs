@@ -17,7 +17,7 @@ namespace AdventOfCode
         {
             List<int> lines = new List<int>();
 
-            foreach(string line in File.ReadAllLines("Inputs/Input.txt"))
+            foreach(string line in File.ReadAllLines("Inputs/InputDay1.txt"))
                 lines.Add(Int32.Parse(line));
 
             return lines;
