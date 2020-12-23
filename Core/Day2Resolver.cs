@@ -12,77 +12,66 @@ namespace AdventOfCode.Core
             _inputReader = inputReader ?? throw new System.ArgumentNullException(nameof(inputReader));
         }
 
-        private class Password {
-            public int RequiredMin {get; set;}
-            public int RequiredMax {get; set;}
+        private class Password 
+        {
+            public int FirstRequirement {get; set;}
+            public int SecondRequirement {get; set;}
             public char RequiredLetter {get; set;}
             public string Value {get; set;}
         }
 
         public int SolveFirstPart()
         {
-            List<string> input = _inputReader.Read("Inputs/InputDay2.txt");
-            List<Password> passwords = new List<Password>();
-
-            input.ForEach(inputLine => {
-                passwords.Add(new Password {
-                    RequiredMin = Int32.Parse(inputLine.Substring(0, inputLine.IndexOf('-'))),
-                    RequiredMax = Int32.Parse(inputLine.Substring(inputLine.IndexOf('-') + 1, inputLine.IndexOf(' ') - inputLine.IndexOf('-') - 1)),
-                    RequiredLetter = char.Parse(inputLine.Substring(inputLine.IndexOf(' ') + 1, inputLine.IndexOf(':') - inputLine.IndexOf(' ') - 1)),
-                    Value = inputLine.Substring(inputLine.IndexOf(':') + 2)
-                });
-            });
-
             int validPasswords = 0;
 
-            foreach(Password password in passwords)
+            foreach(Password password in GetPasswords())
             {
                 int requiredLetterCount = password.Value.Count( x => x == password.RequiredLetter );
 
-                if (requiredLetterCount >= password.RequiredMin && requiredLetterCount <= password.RequiredMax)
+                if (requiredLetterCount >= password.FirstRequirement && requiredLetterCount <= password.SecondRequirement)
                     validPasswords++;
             }
 
             return validPasswords;
         }
 
-        private class NewPassword {
-            public int FirstPosition {get; set;}
-            public int SecondPosition {get; set;}
-            public char RequiredLetter {get; set;}
-            public string Value {get; set;}
-        }
-
         public int SolveSecondPart()
         {
-            List<string> input = _inputReader.Read("Inputs/InputDay2.txt");
-            List<NewPassword> passwords = new List<NewPassword>();
-
-            input.ForEach(inputLine => {
-                passwords.Add(new NewPassword {
-                    FirstPosition = Int32.Parse(inputLine.Substring(0, inputLine.IndexOf('-'))) - 1,
-                    SecondPosition = Int32.Parse(inputLine.Substring(inputLine.IndexOf('-') + 1, inputLine.IndexOf(' ') - inputLine.IndexOf('-') - 1)) - 1,
-                    RequiredLetter = char.Parse(inputLine.Substring(inputLine.IndexOf(' ') + 1, inputLine.IndexOf(':') - inputLine.IndexOf(' ') - 1)),
-                    Value = inputLine.Substring(inputLine.IndexOf(':') + 2)
-                });
-            });
-
             int validPasswords = 0;
 
-            foreach(NewPassword password in passwords)
+            foreach(Password password in GetPasswords())
             {
-                if (password.FirstPosition < 0 || password.FirstPosition >= password.Value.Length ||
-                    password.SecondPosition < 0 || password.SecondPosition >= password.Value.Length)
+                password.FirstRequirement--;
+                password.SecondRequirement--;
+
+                if (password.FirstRequirement < 0 || password.FirstRequirement >= password.Value.Length ||
+                    password.SecondRequirement < 0 || password.SecondRequirement >= password.Value.Length)
                     continue;
 
-                bool firstRequired = password.Value.ElementAt(password.FirstPosition) == password.RequiredLetter;
-                bool secondRequired = password.Value.ElementAt(password.SecondPosition) == password.RequiredLetter;
+                bool firstRequired = password.Value.ElementAt(password.FirstRequirement) == password.RequiredLetter;
+                bool secondRequired = password.Value.ElementAt(password.SecondRequirement) == password.RequiredLetter;
 
                 if (firstRequired ^ secondRequired)
                     validPasswords++;
             }
 
             return validPasswords;
+        }
+
+        private List<Password> GetPasswords()
+        {
+            List<Password> passwords = new List<Password>();
+
+            _inputReader.Read("Inputs/InputDay2.txt").ForEach(inputLine => {
+                passwords.Add(new Password {
+                    FirstRequirement = Int32.Parse(inputLine.Substring(0, inputLine.IndexOf('-'))),
+                    SecondRequirement = Int32.Parse(inputLine.Substring(inputLine.IndexOf('-') + 1, inputLine.IndexOf(' ') - inputLine.IndexOf('-') - 1)),
+                    RequiredLetter = char.Parse(inputLine.Substring(inputLine.IndexOf(' ') + 1, inputLine.IndexOf(':') - inputLine.IndexOf(' ') - 1)),
+                    Value = inputLine.Substring(inputLine.IndexOf(':') + 2)
+                });
+            });
+
+            return passwords;
         }
     }
 }
