@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
-
+using AdventOfCode.Core;
 
 namespace AdventOfCode.Helpers
 {
-    public class InputReader
+    internal class InputFileReader : InputReader
     {
         public List<string> Read(string fileName)
         {
